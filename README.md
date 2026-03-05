@@ -1,7 +1,7 @@
 # Simple Expenses Tracker
 
-<h1>META Digitradings Enterprise Co. - Mini Project for IT Interns</h1> <br />
-<h2>Project Buddy</h2>
+<h2>META Digitradings Enterprise Co. - Mini Project for IT Interns</h2>
+<h3>Project Buddy</h3>
 <ul>
     <li>
         <b>Ivan Parales Duran</b>
