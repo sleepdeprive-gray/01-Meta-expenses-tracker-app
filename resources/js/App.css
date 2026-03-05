@@ -1,0 +1,395 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f0f2;
+  overflow: hidden;
+}
+
+.dark-body {
+  background: #121212;
+  color: #f8f8f8;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 0 24px;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.left-panel,
+.right-panel {
+  background: #f5f5f5;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.left-panel {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.left-panel input,
+.left-panel select,
+.search {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+.left-panel button {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #ccc;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.primary-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.primary-btn.add {
+  background: #3b82f6;
+}
+
+.primary-btn.edit {
+  background: #22c55e;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.secondary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.right-panel {
+  width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.left-panel h2,
+.right-panel h2 {
+  margin: 0 0 8px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filters .search {
+  flex: 1;
+}
+
+.filters input[type="date"] {
+  background: #e0e0e0;
+  border: none;
+  border-radius: 12px;
+  color: #333;
+  padding: 10px;
+  min-width: 100px;
+}
+
+.filters input[type="date"]:focus {
+  outline: 2px solid #646cff;
+}
+
+.list-box {
+  background: #e0e0e0;
+  height: 300px;
+  border-radius: 15px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #444;
+  font-weight: 600;
+}
+
+.status.error {
+  color: #b91c1c;
+}
+
+.list-header,
+.expense-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr 1fr auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.list-header {
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding: 4px 6px;
+  border-radius: 10px;
+  background: #dcdcdc;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.expense-row {
+  background: white;
+  padding: 6px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+}
+
+.cell.actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.cell.actions button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.edit-btn {
+  background: #22c55e;
+}
+
+.delete-btn {
+  background: #ef4444;
+}
+
+.cell.actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cell.date {
+  font-size: 0.9em;
+}
+
+
+.dark {
+  background: #222;
+  color: white;
+}
+
+.dark .left-panel,
+.dark .right-panel {
+  background: #333;
+}
+
+.dark .list-box {
+  background: #444;
+}
+
+.dark .expense-row {
+  background: #555;
+}
+
+.dark .list-header {
+  background: #555;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.dark input,
+.dark select,
+.dark .search {
+  background: #666;
+  color: white;
+}
+
+.dark button {
+  background: #777;
+  color: white;
+}
+
+.dark input::placeholder,
+.dark .search::placeholder {
+  color: #d6d6d6;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.total-chip {
+  font-weight: 700;
+  background: #e0e0e0;
+  border-radius: 15px;
+  padding: 10px 14px;
+  flex: 1;
+}
+
+.toggle-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.toggle-btn.dark {
+  background: #fff;
+  color: #000;
+}
+
+.toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.dark .total-chip {
+  background: #444;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+  padding: 16px;
+  box-sizing: border-box;
+  pointer-events: all;
+}
+
+.modal-backdrop.subtle {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.dark .modal-backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  min-width: 280px;
+  max-width: 90vw;
+  width: 380px;
+  animation: modal-pop 180ms ease-out;
+}
+
+.dark .modal {
+  background: #2f3037;
+  color: #f3f4f6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.modal.small {
+  min-width: 200px;
+  text-align: center;
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.modal-text {
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.modal-btn {
+  min-width: 110px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+
+.modal-btn.cancel {
+  background: #9ca3af;
+  color: #111;
+}
+
+.dark .modal-btn.cancel {
+  background: #6b7280;
+  color: #111;
+}
+
+.modal-btn.success {
+  background: #22c55e;
+}
+
+.modal-btn.danger {
+  background: #ef4444;
+}
+
+.modal-btn:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
