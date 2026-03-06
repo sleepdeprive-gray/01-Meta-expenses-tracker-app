@@ -11,7 +11,9 @@ function App() {
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
+  const [editingOriginalExpense, setEditingOriginalExpense] = useState(null);
+  const [showNoChangesModal, setShowNoChangesModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [confirm, setConfirm] = useState({ open: false, type: null, payload: null });
@@ -66,6 +68,7 @@ function App() {
     };
 
     setError("");
+    setActionLoading(true);
 
     try {
       const response = await fetch(
@@ -92,17 +95,21 @@ function App() {
           )
         );
 
-        setActionLoading(true);
         setTimeout(() => {
           setActionLoading(false);
           setEditId(null);
+          setEditingOriginalExpense(null);
           clearFields();
         }, 2000);
       } else {
         setExpenses((prev) => [...prev, saved]);
         clearFields();
+        setTimeout(() => {
+          setActionLoading(false);
+        }, 2000);
       }
     } catch (err) {
+      setActionLoading(false);
       setError(err.message || "Error saving expense");
     }
   };
@@ -133,6 +140,7 @@ function App() {
   const editExpense = (id) => {
     const expense = expenses.find((item) => item.expenses_ID === id);
     if (!expense) return;
+    setEditingOriginalExpense(expense);
     setDescription(expense.description);
     setCategory(expense.category);
     setAmount(expense.amount);
@@ -170,6 +178,38 @@ function App() {
   const handleResetCancel = () => {
     clearFields();
     setEditId(null);
+    setEditingOriginalExpense(null);
+  };
+
+  const hasExpenseChanges = () => {
+    if (!editingOriginalExpense) return true;
+
+    return (
+      description !== editingOriginalExpense.description ||
+      category !== editingOriginalExpense.category ||
+      Number(amount) !== Number(editingOriginalExpense.amount) ||
+      date !== editingOriginalExpense.date
+    );
+  };
+
+  const handleStartDateChange = (event) => {
+    const selectedStartDate = event.target.value;
+
+    if (endDate && selectedStartDate && selectedStartDate > endDate) {
+      return;
+    }
+
+    setStartDate(selectedStartDate);
+  };
+
+  const handleEndDateChange = (event) => {
+    const selectedEndDate = event.target.value;
+
+    if (startDate && selectedEndDate && selectedEndDate < startDate) {
+      return;
+    }
+
+    setEndDate(selectedEndDate);
   };
 
   const formatDate = (value) => {
@@ -182,16 +222,29 @@ function App() {
     return `${month}/${day}/${year}`;
   };
 
-  const filteredExpenses = expenses.filter((expense) => {
-    const matchesSearch =
-      expense.description.toLowerCase().includes(search.toLowerCase()) ||
-      expense.category.toLowerCase().includes(search.toLowerCase());
+  const filteredExpenses = expenses
+    .filter((expense) => {
+      const matchesSearch =
+        expense.description.toLowerCase().includes(search.toLowerCase()) ||
+        expense.category.toLowerCase().includes(search.toLowerCase());
 
-    const withinStart = !startDate || expense.date >= startDate;
-    const withinEnd = !endDate || expense.date <= endDate;
+      const withinStart = !startDate || expense.date >= startDate;
+      const withinEnd = !endDate || expense.date <= endDate;
 
-    return matchesSearch && withinStart && withinEnd;
-  });
+      return matchesSearch && withinStart && withinEnd;
+    })
+    .sort((a, b) => {
+      if (a.date === b.date) {
+        return Number(b.expenses_ID) - Number(a.expenses_ID);
+      }
+      return b.date.localeCompare(a.date);
+    });
+
+  const isFormComplete =
+    description.trim() !== "" &&
+    category.trim() !== "" &&
+    amount !== "" &&
+    date !== "";
 
   const total = filteredExpenses.reduce((sum, expense) => sum + Number(expense.amount), 0);
 
@@ -231,8 +284,13 @@ function App() {
         <div className="form-actions">
           <button
             className={editId !== null ? "primary-btn edit" : "primary-btn add"}
+            disabled={editId === null && !isFormComplete}
             onClick={() => {
               if (editId !== null) {
+                if (!hasExpenseChanges()) {
+                  setShowNoChangesModal(true);
+                  return;
+                }
                 openConfirm("update");
               } else {
                 addOrUpdateExpense();
@@ -262,16 +320,17 @@ function App() {
           <input
             type="date"
             value={startDate}
-            max={today}
-            onChange={(event) => setStartDate(event.target.value)}
+            max={endDate || today}
+            onChange={handleStartDateChange}
             aria-label="Start date"
           />
 
           <input
             type="date"
             value={endDate}
+            min={startDate || ""}
             max={today}
-            onChange={(event) => setEndDate(event.target.value)}
+            onChange={handleEndDateChange}
             aria-label="End date"
           />
         </div>
@@ -329,6 +388,18 @@ function App() {
               >
                 {confirm.type === "delete" ? "Delete" : "Update"}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showNoChangesModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>No Changes Detected</h3>
+            <p className="modal-text">There are no updates to save.</p>
+            <div className="modal-actions">
+              <button className="modal-btn cancel" onClick={() => setShowNoChangesModal(false)}>Close</button>
             </div>
           </div>
         </div>
